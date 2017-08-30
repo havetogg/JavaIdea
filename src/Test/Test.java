@@ -1,6 +1,12 @@
 package Test;
 
 
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.io.Reader;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+
 /**
  * @Auther: Tinny.liang
  * @Description:
@@ -83,5 +89,24 @@ public class Test {
         /*System.out.println(c());*/
         /*Map<String,String> myMap*/
 
+        RandomAccessFile randomAccessFile = new RandomAccessFile("data/nio.text","rw");
+        FileChannel fileChannel = randomAccessFile.getChannel();
+
+        ByteBuffer byteBuffer = ByteBuffer.allocate(48);
+
+        int bytesRead = fileChannel.read(byteBuffer);
+        while(bytesRead != -1){
+            System.out.println("Read"+bytesRead);
+            byteBuffer.flip();
+
+            while(byteBuffer.hasRemaining()){
+                System.out.println((char)byteBuffer.get());
+            }
+
+            byteBuffer.clear();
+            bytesRead = fileChannel.read(byteBuffer);
+
+        }
+        randomAccessFile.close();
     }
 }
